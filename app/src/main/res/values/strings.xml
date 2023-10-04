@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Wallpaper Saver</string>
+    <string name="how_to_use">
+        1. Open any wallpaper app of your choice.\n
+        2. Tap on \"Use as\" or \"Apply as\".\n
+        3. Select this app from the list.\n
+        4. Save the image to your desired location.
+    </string>
+</resources>

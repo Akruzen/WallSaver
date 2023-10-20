@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".SaveWallpaperActivity">
 
+    <TextView
+        android:id="@+id/PermissionGrantedTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/permission_denied"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/saveWallFAB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/backgroundImageView"
         android:layout_width="0dp"
@@ -18,15 +31,17 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/saveWallFAB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="16dp"
         android:onClick="saveWallpaper"
+        android:text="Save Wallpaper"
+        android:visibility="gone"
         app:icon="@drawable/round_save_24"
         app:iconGravity="textStart"
-        android:text="Save Wallpaper"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

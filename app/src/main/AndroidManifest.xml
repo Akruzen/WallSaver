@@ -20,7 +20,7 @@
             android:name=".SaveWallpaperActivity"
             android:exported="true"
             android:label="Save to Device"
-            android:theme="@style/Theme.WallpaperSaver">
+            android:theme="@style/SetWallpaperTheme">
             <intent-filter>
                 <action android:name="android.intent.action.ATTACH_DATA" />
 

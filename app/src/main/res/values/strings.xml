@@ -2,8 +2,12 @@
     <string name="app_name">WallSaver</string>
     <string name="how_to_use">
         1. Open any wallpaper app of your choice.\n2.
-        Tap on \"Use as\" or \"Apply as\".\n3.
+        Tap on options like \"Use as\", \"Apply as\", \"Set With\", etc.\n3.
         Select this app from the list.\n4.
         Save the image to your desired location.
     </string>
+    <string name="permission_granted">Permission granted. Go back and try applying the wallpaper again. Don\'t worry, this
+    will be the last time you need to do this; unless of course, you remove the permission.</string>
+    <string name="permission_denied">Permission denied. In order to access the wallpapers from third party apps,
+    storage permission is needed.</string>
 </resources>

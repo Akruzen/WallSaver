@@ -4,18 +4,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.WindowCompat;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +36,14 @@ public class SaveWallpaperActivity extends AppCompatActivity {
 
     ImageView backgroundImageView;
     Uri imageUri;
+    Bitmap imageBitmap;
     Intent intent;
     private static final int REQUEST_CODE_SAVE_FILE = 1;
     private static final int REQUEST_CODE_READ_STORAGE_PERMISSION = 2;
+
+    private void setActivityFullscreen() {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+    }
 
     private void askForPermission() {
         String perm = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -41,7 +55,9 @@ public class SaveWallpaperActivity extends AppCompatActivity {
 
     private boolean isPermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            System.out.println("Bull: inside isPermissionGranted");
             if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Bull: isPermissionGranted is true");
                 return true;
             }
             Toast.makeText(this, "Read Permission Required", Toast.LENGTH_SHORT).show();
@@ -67,14 +83,28 @@ public class SaveWallpaperActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        System.out.println("Bull: inside onRequestPermissionsResult");
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            setImage();
+            ((TextView) findViewById(R.id.PermissionGrantedTV)).setText(getString(R.string.permission_granted));
+            System.out.println("Bull: Grant results are true");
         }
     }
 
     private void setImage() {
         if (intent != null) {
-            backgroundImageView.setImageURI(imageUri);
+            try {
+                findViewById(R.id.saveWallFAB).setVisibility(View.VISIBLE);
+                findViewById(R.id.PermissionGrantedTV).setVisibility(View.GONE);
+                System.out.println("Bull: inside try of setImage");
+                imageUri = intent.getData();
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                if (inputStream != null) {
+                    imageBitmap = BitmapFactory.decodeStream(inputStream);
+                    backgroundImageView.setImageBitmap(imageBitmap);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -86,24 +116,13 @@ public class SaveWallpaperActivity extends AppCompatActivity {
             if (data != null && data.getData() != null && imageUri != null) {
                 try {
                     Uri selectedFileUri = data.getData();
-                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
                     OutputStream outputStream = getContentResolver().openOutputStream(selectedFileUri);
-                    if (inputStream != null && outputStream != null) {
-                        // Read the image data from inputStream and write it to outputStream.
-                        byte[] buffer = new byte[1024];
-                        int bytesRead;
-                        while ((bytesRead = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-                        outputStream.close();
-                        inputStream.close();
-                        Toast.makeText(this, "File saved successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(this, "IO Stream is null", Toast.LENGTH_SHORT).show();
-                    }
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+                    Toast.makeText(this, "Save Successful", Toast.LENGTH_SHORT).show();
+                    finish();
                 } catch (IOException | NullPointerException e) {
-                    Toast.makeText(this, "IO Exception", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -114,16 +133,15 @@ public class SaveWallpaperActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setActivityFullscreen();
         setContentView(R.layout.activity_save_wallpaper);
         // Find view by ID
         backgroundImageView = findViewById(R.id.backgroundImageView);
         intent = getIntent();
-        if (intent != null) {
-            imageUri = intent.getData();
-        }
         if (!isPermissionGranted()) {
             askForPermission();
         } else {
+            System.out.println("Bull: inside else of isPermissionGranted");
             setImage();
         }
     }

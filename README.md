@@ -22,7 +22,8 @@ Then clone this repository using
 ```bash
   git clone https://github.com/Akruzen/WallSaver
 ```
-
+## Licence
+This program is protected under [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html). Please refer to the [Licence](https://github.com/Akruzen/WallSaver/blob/master/LICENSE) for more details.  
 ## Feedback
 
 If you have any feedback, you can reach me on [Discord](<https://discordapp.com/users/akruzen#2652>) or email me at omkarphadke.dev@gmail.com

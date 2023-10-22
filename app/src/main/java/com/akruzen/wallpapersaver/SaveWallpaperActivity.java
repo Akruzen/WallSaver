@@ -1,11 +1,5 @@
 package com.akruzen.wallpapersaver;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.view.WindowCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,14 +11,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.color.DynamicColors;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.WindowCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +50,6 @@ public class SaveWallpaperActivity extends AppCompatActivity {
 
     private boolean isPermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            System.out.println("Bull: inside isPermissionGranted");
             if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
                 System.out.println("Bull: isPermissionGranted is true");
                 return true;

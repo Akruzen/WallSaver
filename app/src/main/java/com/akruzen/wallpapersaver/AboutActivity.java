@@ -12,11 +12,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class AboutActivity extends AppCompatActivity {
 
     TextView versionNameTextView;
+
+    public void openSourceLicencesTapped(View view) {
+        startActivity(new Intent(this, OssLicensesMenuActivity.class));
+    }
 
     public void contactPressed(View view) {
         String uriString = "https://www.linkedin.com/in/omkar-phadke-b97b741ba/";

@@ -1,5 +1,10 @@
 package com.akruzen.wallpapersaver;
 
+import static com.akruzen.wallpapersaver.Common.Constants.discordProfileLink;
+import static com.akruzen.wallpapersaver.Common.Constants.githubProfileLink;
+import static com.akruzen.wallpapersaver.Common.Constants.linkedInProfileLink;
+import static com.akruzen.wallpapersaver.Common.Constants.sourceCodeLink;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -24,13 +29,13 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     public void contactPressed(View view) {
-        String uriString = "https://www.linkedin.com/in/omkar-phadke-b97b741ba/";
+        String uriString = linkedInProfileLink;
         if (view.getId() == R.id.githubButton) {
-            uriString = "https://github.com/Akruzen";
+            uriString = githubProfileLink;
         } else if (view.getId() == R.id.discordButton) {
-            uriString = "https://discordapp.com/users/akruzen#2652";
+            uriString = discordProfileLink;
         } else if (view.getId() == R.id.sourceCodeButton) {
-            uriString = "https://github.com/Akruzen/Wallsaver";
+            uriString = sourceCodeLink;
         }
         // Else default behaviour will be to open linked in
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uriString)));

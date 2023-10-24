@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -29,18 +30,18 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3.Button.IconButton"
-            app:icon="@drawable/round_info_24"
-            android:onClick="aboutPressed"
-            android:gravity="end"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:onClick="aboutPressed"
+            app:icon="@drawable/round_info_24" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3.Button.IconButton"
-            app:icon="@drawable/round_settings_24"
-            android:gravity="end"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            app:icon="@drawable/round_settings_24" />
 
     </LinearLayout>
 
@@ -73,10 +74,21 @@
                     android:padding="16dp">
 
                     <TextView
+                        android:id="@+id/permissionTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="Storage permission is required for proper functioning of the app." />
+                        android:text="@string/permission_below_tiramisu" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/learnMoreAndroidPermissionTV"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/round_open_in_new_24"
+                        android:onClick="learnMoreAndroidPermissionTapped"
+                        android:text="Learn more about Android 13+ permissions"
+                        android:layout_gravity="end"/>
 
                     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                         android:layout_width="match_parent"
@@ -118,6 +130,21 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actions:"
+                android:textSize="20sp" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button.TextButton"
+                android:onClick="saveCurrWallpaperTapped"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save current wallpaper"/>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

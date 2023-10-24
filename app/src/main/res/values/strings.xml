@@ -5,12 +5,13 @@
         Tap on options like \"Use as\", \"Apply as\", \"Set With\", etc.\n3.
         Select this app from the list.\n4.
         Save the image to your desired location.\n\nSave current wallpaper:\n1. 
-        Tap the extract wallpaper below to save to your device.\n2.
-        Note that it might not work properly on some devices running a certain version of Android 13
-        due to an Android Bug. If that is the case, the only solution would be to update your system.
+        Tap the extract wallpaper button below to save to your device.
     </string>
     <string name="permission_granted">Permission granted. Go back and try applying the wallpaper again. Don\'t worry, this
     will be the last time you need to do this; unless of course, you remove the permission.</string>
     <string name="permission_denied">Permission denied. In order to access the wallpapers from third party apps,
     storage permission is needed.</string>
+    <string name="permission_below_tiramisu">Read Storage permission is required for proper functioning of the app. </string>
+    <string name="permission_from_tiramisu">Starting from Android 13, \"Manage External Storage\" permission is required
+    along with reading media images to access the wallpapers you have currently applied.</string>
 </resources>

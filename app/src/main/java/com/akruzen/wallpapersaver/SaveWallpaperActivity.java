@@ -1,5 +1,11 @@
 package com.akruzen.wallpapersaver;
 
+import static com.akruzen.wallpapersaver.Common.Constants.REQUEST_CODE_SAVE_FILE;
+import static com.akruzen.wallpapersaver.Common.Methods.askForStoragePermission;
+import static com.akruzen.wallpapersaver.Common.Methods.getReadyForSavingWallpaper;
+import static com.akruzen.wallpapersaver.Common.Methods.isPermissionGranted;
+import static com.akruzen.wallpapersaver.Common.Methods.writeWallpaperFile;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -33,51 +39,18 @@ public class SaveWallpaperActivity extends AppCompatActivity {
     Uri imageUri;
     Bitmap imageBitmap;
     Intent intent;
-    private static final int REQUEST_CODE_SAVE_FILE = 1;
-    private static final int REQUEST_CODE_READ_STORAGE_PERMISSION = 2;
 
     private void setActivityFullscreen() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
     }
 
-    private void askForPermission() {
-        String perm = Manifest.permission.READ_EXTERNAL_STORAGE;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            perm = Manifest.permission.READ_MEDIA_IMAGES;
-        }
-        ActivityCompat.requestPermissions(this, new String[]{perm}, REQUEST_CODE_READ_STORAGE_PERMISSION);
-    }
-
-    private boolean isPermissionGranted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                System.out.println("Bull: isPermissionGranted is true");
-                return true;
-            }
-            Toast.makeText(this, "Read Permission Required", Toast.LENGTH_SHORT).show();
-        } else {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            }
-            Toast.makeText(this, "Read Permission Required", Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-
     public void saveWallpaper(View view) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-        String currentDateAndTime = sdf.format(new Date());
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/image"); // Set the desired MIME type of the file to save.
-        intent.putExtra(Intent.EXTRA_TITLE, currentDateAndTime + ".png");
-        startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
+        getReadyForSavingWallpaper(this);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        System.out.println("Bull: inside onRequestPermissionsResult");
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             ((TextView) findViewById(R.id.PermissionGrantedTV)).setText(getString(R.string.permission_granted));
             System.out.println("Bull: Grant results are true");
@@ -105,23 +78,8 @@ public class SaveWallpaperActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE_SAVE_FILE && resultCode == Activity.RESULT_OK) {
-            if (data != null && data.getData() != null && imageUri != null) {
-                try {
-                    Uri selectedFileUri = data.getData();
-                    OutputStream outputStream = getContentResolver().openOutputStream(selectedFileUri);
-                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.flush();
-                    outputStream.close();
-                    Toast.makeText(this, "Save Successful", Toast.LENGTH_SHORT).show();
-                    finish();
-                } catch (IOException | NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
+        writeWallpaperFile(this, requestCode, resultCode, data, imageBitmap);
+        finish();
     }
 
     @Override
@@ -132,8 +90,8 @@ public class SaveWallpaperActivity extends AppCompatActivity {
         // Find view by ID
         backgroundImageView = findViewById(R.id.backgroundImageView);
         intent = getIntent();
-        if (!isPermissionGranted()) {
-            askForPermission();
+        if (!isPermissionGranted(this)) {
+            askForStoragePermission(this);
         } else {
             System.out.println("Bull: inside else of isPermissionGranted");
             setImage();

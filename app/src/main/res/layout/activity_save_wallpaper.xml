@@ -15,7 +15,7 @@
         android:padding="16dp"
         android:text="@string/permission_denied"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/saveWallFAB"
+        app:layout_constraintBottom_toTopOf="@+id/actionsLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,18 +30,80 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/saveWallFAB"
+    <LinearLayout
+        android:id="@+id/actionsLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:onClick="saveWallpaper"
-        android:text="Save Wallpaper"
+        android:layout_margin="8dp"
+        android:orientation="vertical"
         android:visibility="gone"
-        app:icon="@drawable/round_save_24"
-        app:iconGravity="textStart"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/saveWallFAB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="saveWallpaper"
+                android:text="Save"
+                android:layout_margin="8dp"
+                app:icon="@drawable/round_save_24"
+                app:iconGravity="textStart"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/applyWallFAB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="applyWallpaper"
+                android:text="Apply"
+                android:layout_margin="8dp"
+                app:icon="@drawable/round_wallpaper_24"
+                app:iconGravity="textStart"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/shareWallFAB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Share"
+                android:layout_margin="8dp"
+                app:icon="@drawable/round_share_24"
+                app:iconGravity="textStart"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/effectsWallFAB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Effects"
+                android:layout_margin="8dp"
+                app:icon="@drawable/round_photo_filter_24"
+                app:iconGravity="textStart"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

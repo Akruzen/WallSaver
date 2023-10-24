@@ -104,7 +104,7 @@
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
                                 android:text="Rate"
-                                app:icon="@drawable/outline_star_rate_24"
+                                app:icon="@drawable/round_star_rate_24"
                                 app:iconPadding="8dp" />
 
                             <com.google.android.material.button.MaterialButton
@@ -114,7 +114,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Share"
-                                app:icon="@drawable/outline_share_24"
+                                app:icon="@drawable/round_share_24"
                                 app:iconPadding="8dp" />
 
                         </LinearLayout>

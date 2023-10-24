@@ -8,6 +8,7 @@ import static com.akruzen.wallpapersaver.Common.Methods.writeWallpaperFile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -48,21 +49,31 @@ public class SaveWallpaperActivity extends AppCompatActivity {
         getReadyForSavingWallpaper(this);
     }
 
+    public void applyWallpaper(View view) {
+        try {
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+            wallpaperManager.setBitmap(imageBitmap);
+            Toast.makeText(this, "Wallpaper applied!", Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (IOException e) {
+            Toast.makeText(this, "Unable to apply wallpaper", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             ((TextView) findViewById(R.id.PermissionGrantedTV)).setText(getString(R.string.permission_granted));
-            System.out.println("Bull: Grant results are true");
         }
     }
 
     private void setImage() {
         if (intent != null) {
             try {
-                findViewById(R.id.saveWallFAB).setVisibility(View.VISIBLE);
+                findViewById(R.id.actionsLinearLayout).setVisibility(View.VISIBLE);
                 findViewById(R.id.PermissionGrantedTV).setVisibility(View.GONE);
-                System.out.println("Bull: inside try of setImage");
                 imageUri = intent.getData();
                 InputStream inputStream = getContentResolver().openInputStream(imageUri);
                 if (inputStream != null) {
@@ -93,7 +104,6 @@ public class SaveWallpaperActivity extends AppCompatActivity {
         if (!isPermissionGranted(this)) {
             askForStoragePermission(this);
         } else {
-            System.out.println("Bull: inside else of isPermissionGranted");
             setImage();
         }
     }

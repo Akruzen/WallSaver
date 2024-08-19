@@ -1,21 +1,16 @@
 package com.akruzen.wallpapersaver;
 
-import static com.akruzen.wallpapersaver.Common.Constants.REQUEST_CODE_SAVE_FILE;
 import static com.akruzen.wallpapersaver.Common.Methods.askForStoragePermission;
 import static com.akruzen.wallpapersaver.Common.Methods.getReadyForSavingWallpaper;
 import static com.akruzen.wallpapersaver.Common.Methods.isPermissionGranted;
 import static com.akruzen.wallpapersaver.Common.Methods.writeWallpaperFile;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,15 +19,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.WindowCompat;
+
+import com.akruzen.wallpapersaver.Common.Methods;
+import com.akruzen.wallpapersaver.Interfaces.ClicksHandlerInterface;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Date;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SaveWallpaperActivity extends AppCompatActivity {
 
@@ -50,15 +47,12 @@ public class SaveWallpaperActivity extends AppCompatActivity {
     }
 
     public void applyWallpaper(View view) {
-        try {
-            WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
-            wallpaperManager.setBitmap(imageBitmap);
-            Toast.makeText(this, "Wallpaper applied!", Toast.LENGTH_SHORT).show();
-            finish();
-        } catch (IOException e) {
-            Toast.makeText(this, "Unable to apply wallpaper", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        Map<Integer, ClicksHandlerInterface> map = new HashMap<>();
+        map.put(R.id.homeScreenFAB, setInterfaceMethods(WallpaperManager.FLAG_SYSTEM));
+        map.put(R.id.lockScreenFAB, setInterfaceMethods(WallpaperManager.FLAG_LOCK));
+        AlertDialog dialog = Methods.showMaterialDialog(this, R.layout.material_dialog_template,
+                getString(R.string.set_wallpaper), getString(R.string.apply_wallpaper_to), true, map);
+        dialog.show();
     }
 
     @Override
@@ -106,5 +100,23 @@ public class SaveWallpaperActivity extends AppCompatActivity {
         } else {
             setImage();
         }
+    }
+
+    private ClicksHandlerInterface setInterfaceMethods (int wallpaperFlag) {
+        return new ClicksHandlerInterface() {
+            @Override
+            public void onClickEvent() {
+                try {
+                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+                    wallpaperManager.setBitmap(imageBitmap, null, true,
+                            wallpaperFlag == WallpaperManager.FLAG_LOCK ? WallpaperManager.FLAG_LOCK : WallpaperManager.FLAG_SYSTEM);
+                    Toast.makeText(getApplicationContext(), "Wallpaper applied!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "Unable to apply wallpaper", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 }

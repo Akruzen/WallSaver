@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import java.io.OutputStream;
 public class MainActivity extends AppCompatActivity {
     MaterialCardView permissionCardView;
     Bitmap wallpaperBitmap;
+    boolean isApiMin34 = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
 
     public void aboutPressed(View view) {
         startActivity(new Intent(this, AboutActivity.class));
@@ -55,7 +57,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void saveCurrWallpaperTapped(View view) {
+    public void saveCurrHomeWallpaperTapped(View view) {
+        saveCurrWallpaper(false);
+    }
+
+    public void saveCurrLockWallpaperTapped(View view) {
+        saveCurrWallpaper(true);
+    }
+
+    public void saveCurrWallpaper(boolean isLockScreen) {
         try {
             boolean permissionChecker;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -65,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
             }
             if (permissionChecker) {
                 final WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
-                final Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+                @SuppressLint({"NewApi", "LocalSuppress"})
+                final Drawable wallpaperDrawable =
+                        (isLockScreen && isApiMin34) ? wallpaperManager.getDrawable(WallpaperManager.FLAG_LOCK)
+                        : wallpaperManager.getDrawable();
                 if (wallpaperDrawable instanceof BitmapDrawable) {
                     wallpaperBitmap = ((BitmapDrawable) wallpaperDrawable).getBitmap();
                     getReadyForSavingWallpaper(this);
@@ -118,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setVisibilities() {
+        this.findViewById(R.id.saveLockWallTextButton).setVisibility(isApiMin34 ? View.VISIBLE : View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ((TextView) findViewById(R.id.permissionTextView)).setText(getString(R.string.permission_from_tiramisu));
         }

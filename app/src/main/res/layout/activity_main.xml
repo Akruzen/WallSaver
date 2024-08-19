@@ -140,10 +140,18 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.Material3.Button.TextButton"
-                android:onClick="saveCurrWallpaperTapped"
+                android:onClick="saveCurrHomeWallpaperTapped"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save current wallpaper"/>
+                android:text="@string/save_home_screen_wallpaper"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveLockWallTextButton"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:onClick="saveCurrLockWallpaperTapped"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save_lock_screen_wallpaper"/>
 
         </LinearLayout>
     </ScrollView>

@@ -14,15 +14,25 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+
+import com.akruzen.wallpapersaver.Interfaces.ClicksHandlerInterface;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class Methods {
@@ -84,6 +94,40 @@ public class Methods {
                 }
             }
         }
+    }
+
+    // Get Material Extended Floating Action Button
+    public static ExtendedFloatingActionButton getExtendedFAB(Activity activity, String title) {
+        ExtendedFloatingActionButton homeScreenFAB = new ExtendedFloatingActionButton(activity);
+        homeScreenFAB.setText(title);
+        homeScreenFAB.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        return homeScreenFAB;
+    }
+
+    // Dynamic method to show material dialog. It is capable of either adding views or plain text
+    @SafeVarargs
+    public static AlertDialog showMaterialDialog(@NonNull Activity activity, @Nullable Integer layoutResourceId,
+                                                 @Nullable String title, @Nullable String content, @Nullable Boolean isDismissible,
+                                                 @Nullable Map<Integer, ClicksHandlerInterface> ... viewIdsMappedToMethods)
+            throws ClassCastException {
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(activity);
+        if (layoutResourceId != null) {
+            // This means user wants to add views he has passed any
+            LayoutInflater inflater = LayoutInflater.from(activity);
+            View layoutView = inflater.inflate(layoutResourceId, null);
+            if (viewIdsMappedToMethods != null) {
+                // Traverse through map and apply interface methods to views
+                for (Map.Entry<Integer, ClicksHandlerInterface> entry : viewIdsMappedToMethods[0].entrySet()) {
+                    View view = layoutView.findViewById(entry.getKey());
+                    view.setOnClickListener(v -> entry.getValue().onClickEvent());
+                }
+            }
+            dialogBuilder.setView(layoutView);
+        }
+        if (title != null) dialogBuilder.setTitle(title);
+        if (content != null) dialogBuilder.setMessage(content);
+        dialogBuilder.setCancelable(isDismissible != null && isDismissible);
+        return dialogBuilder.create();
     }
 
 }

@@ -14,4 +14,10 @@
     <string name="permission_below_tiramisu">Read Storage permission is required for proper functioning of the app. </string>
     <string name="permission_from_tiramisu">Starting from Android 13, \"Manage External Storage\" permission is required
     along with reading media images to access the wallpapers you have currently applied.</string>
+    <string name="set_wallpaper">Set wallpaper</string>
+    <string name="apply_wallpaper_to">Apply wallpaper to</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="lock_screen">Lock Screen</string>
+    <string name="save_home_screen_wallpaper">Save home screen wallpaper</string>
+    <string name="save_lock_screen_wallpaper">Save lock screen wallpaper</string>
 </resources>

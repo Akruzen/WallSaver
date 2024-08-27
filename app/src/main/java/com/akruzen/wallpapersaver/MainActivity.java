@@ -27,10 +27,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.akruzen.wallpapersaver.Common.Methods;
+import com.akruzen.wallpapersaver.Interfaces.ClicksHandlerInterface;
 import com.google.android.material.card.MaterialCardView;
 
 import java.io.IOException;
@@ -83,8 +86,11 @@ public class MainActivity extends AppCompatActivity {
                     wallpaperBitmap = ((BitmapDrawable) wallpaperDrawable).getBitmap();
                     getReadyForSavingWallpaper(this);
                 } else {
-                    // Wallpaper may be of a live wallpaper type
-                    Toast.makeText(this, "Current wallpaper image type is incompatible!", Toast.LENGTH_SHORT).show();
+                    // Wallpaper may be of a live wallpaper type or home screen & lock screen have same wallpaper
+                    Methods.showMaterialDialog(this,
+                                    getString(R.string.cannot_load_wallpaper), getString(R.string.cannot_load_wallpaper_desc),
+                                    new Pair<>(getString(R.string.okay), null), null, null)
+                            .show();
                 }
             } else {
                 Toast.makeText(this, "Storage permission is needed!", Toast.LENGTH_SHORT).show();

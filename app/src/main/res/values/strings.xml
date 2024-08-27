@@ -20,4 +20,16 @@
     <string name="lock_screen">Lock Screen</string>
     <string name="save_home_screen_wallpaper">Save home screen wallpaper</string>
     <string name="save_lock_screen_wallpaper">Save lock screen wallpaper</string>
+    <string name="cannot_load_wallpaper">Cannot load wallpaper</string>
+    <string name="cannot_load_wallpaper_desc">Lock screen wallpaper cannot be acquired. This can occur if:\n\t1. You have
+    a live wallpaper applied to lock screen.\n\t2. You have same wallpaper on home screen and lock screen. In this case, you can use
+        \'Save home screen wallpaper\' option.\n\t3. You are not running
+    Android version 14 or above.</string>
+    <string name="okay">Okay</string>
+    <string name="cancel">Cancel</string>
+
+    <!--Changelog-->
+    <string name="r1.0">- Initial Release</string>
+    <string name="r1.0.1">- Added new actions:\n\t- Save current Home Screen Wallpaper\n\t- Save current Lock Screen Wallpaper (requires Android 14 or above)
+        \n- Added ability to apply wallpapers via app along with saving\n- New save wallpaper UI</string>
 </resources>

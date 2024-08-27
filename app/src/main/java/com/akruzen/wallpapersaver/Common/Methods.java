@@ -6,6 +6,7 @@ import static com.akruzen.wallpapersaver.Common.Constants.REQUEST_MANAGE_STORAGE
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,6 +30,8 @@ import com.akruzen.wallpapersaver.Interfaces.ClicksHandlerInterface;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
@@ -36,10 +40,6 @@ import java.util.Map;
 
 
 public class Methods {
-
-    public static boolean isTiramisuOrHigher() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
-    }
 
     public static void askForStoragePermission(Activity activity) {
         String perm = android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -104,11 +104,9 @@ public class Methods {
         return homeScreenFAB;
     }
 
-    // Dynamic method to show material dialog. It is capable of either adding views or plain text
-    @SafeVarargs
     public static AlertDialog showMaterialDialog(@NonNull Activity activity, @Nullable Integer layoutResourceId,
                                                  @Nullable String title, @Nullable String content, @Nullable Boolean isDismissible,
-                                                 @Nullable Map<Integer, ClicksHandlerInterface> ... viewIdsMappedToMethods)
+                                                 @Nullable Map<Integer, ClicksHandlerInterface> viewIdsMappedToMethods)
             throws ClassCastException {
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(activity);
         if (layoutResourceId != null) {
@@ -117,7 +115,7 @@ public class Methods {
             View layoutView = inflater.inflate(layoutResourceId, null);
             if (viewIdsMappedToMethods != null) {
                 // Traverse through map and apply interface methods to views
-                for (Map.Entry<Integer, ClicksHandlerInterface> entry : viewIdsMappedToMethods[0].entrySet()) {
+                for (Map.Entry<Integer, ClicksHandlerInterface> entry : viewIdsMappedToMethods.entrySet()) {
                     View view = layoutView.findViewById(entry.getKey());
                     view.setOnClickListener(v -> entry.getValue().onClickEvent());
                 }
@@ -127,6 +125,38 @@ public class Methods {
         if (title != null) dialogBuilder.setTitle(title);
         if (content != null) dialogBuilder.setMessage(content);
         dialogBuilder.setCancelable(isDismissible != null && isDismissible);
+        return dialogBuilder.create();
+    }
+    @NonNull
+    public static AlertDialog showMaterialDialog(@NonNull Activity activity, @NonNull String title, @NonNull String content,
+                                                 @Nullable Pair<@NotNull String, @org.jetbrains.annotations.Nullable ClicksHandlerInterface> onPositiveClick,
+                                                 @Nullable Pair<@NotNull String, @org.jetbrains.annotations.Nullable ClicksHandlerInterface> onNegativeClick,
+                                                 @Nullable Pair<@NotNull String, @org.jetbrains.annotations.Nullable ClicksHandlerInterface> onNeutralClick) {
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(activity);
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setMessage(content);
+        dialogBuilder.setCancelable(true);
+        if (onPositiveClick != null) {
+            dialogBuilder.setPositiveButton(onPositiveClick.first,
+                    (dialog, which) -> {
+                        if (onPositiveClick.second != null) onPositiveClick.second.onClickEvent();
+                        dialog.dismiss();
+                    });
+        }
+        if (onNegativeClick != null) {
+            dialogBuilder.setNegativeButton(onNegativeClick.first,
+                    (dialog, which) -> {
+                        if (onNegativeClick.second != null) onNegativeClick.second.onClickEvent();
+                        dialog.dismiss();
+                    });
+        }
+        if (onNeutralClick != null) {
+            dialogBuilder.setNeutralButton(onNeutralClick.first,
+                    (dialog, which) -> {
+                        if (onNeutralClick.second != null) onNeutralClick.second.onClickEvent();
+                        dialog.dismiss();
+                    });
+        }
         return dialogBuilder.create();
     }
 
